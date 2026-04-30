@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import CandidateCard from '@/components/CandidateCard'
 import RevealScreen from '@/components/RevealScreen'
 import WinnerDisplay from '@/components/WinnerDisplay'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { kingCandidates, queenCandidates, type Candidate } from '@/lib/candidates'
 
 type AppStage = 'lobby' | 'reveal' | 'winner'
@@ -32,6 +33,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <ThemeToggle />
       <AnimatePresence>
         {stage === 'reveal' && (
           <motion.div

@@ -16,9 +16,22 @@ const raleway = Raleway({
 })
 
 export const metadata: Metadata = {
-  title: 'The Most Anticipated Reveal at Dusk 2026. Witness the Crowning of This Year’s King & Queen.',
+  title: "The Most Anticipated Reveal at Dusk 2026. Witness the Crowning of This Year's King & Queen.",
   description: 'Grand Reveal at Dusk 2026. Witness the Crowning of the King & Queen.',
   generator: 'v0.app',
+}
+
+function ThemeInitializer() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          const savedTheme = localStorage.getItem('kingqueen-theme') || 'dark';
+          document.documentElement.className = 'theme-' + savedTheme;
+        `,
+      }}
+    />
+  )
 }
 
 export default function RootLayout({
@@ -27,7 +40,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${raleway.variable} bg-background`}>
+    <html lang="en" className={`${cinzel.variable} ${raleway.variable} bg-background theme-dark`}>
+      <head>
+        <ThemeInitializer />
+      </head>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

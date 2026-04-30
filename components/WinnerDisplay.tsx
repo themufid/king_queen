@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import type { Candidate } from '@/lib/candidates'
+import { playCelebrationMusic } from '@/lib/sound-utils'
 
 interface WinnerDisplayProps {
   king: Candidate
@@ -271,8 +272,13 @@ function WinnerCard({ candidate, title, delay, color }: WinnerCardProps) {
 
 export default function WinnerDisplay({ king, queen, onReplay }: WinnerDisplayProps) {
   const [showReplay, setShowReplay] = useState(false)
+  const musicPlayedRef = useRef(false)
 
   useEffect(() => {
+    if (!musicPlayedRef.current) {
+      playCelebrationMusic()
+      musicPlayedRef.current = true
+    }
     const t = setTimeout(() => setShowReplay(true), 3500)
     return () => clearTimeout(t)
   }, [])

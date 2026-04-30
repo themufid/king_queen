@@ -88,6 +88,38 @@ export const queenCandidates: Candidate[] = [
 export const allCandidates = [...kingCandidates, ...queenCandidates]
 
 // ─────────────────────────────────────────────────────────────────────────────
+// WEIGHTED CANDIDATE POOL — untuk efek spinning yang lebih dramatis
+// Kandidat dengan bobot lebih tinggi muncul lebih sering
+//
+// King weights:
+//   Rehan Bastian (id 1) — 3x (paling sering)
+//   Bima Arista (id 2) — 2x
+//   Maulana Hidayat (id 5) — 2x
+//   Tio Mahardika (id 3) — 1x
+//   Muhammad Mizard (id 4) — 1x
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const weightedKingCandidates: Candidate[] = [
+  kingCandidates[0], // Rehan 1
+  kingCandidates[0], // Rehan 2
+  kingCandidates[0], // Rehan 3
+  kingCandidates[1], // Bima 1
+  kingCandidates[1], // Bima 2
+  kingCandidates[2], // Tio
+  kingCandidates[3], // Mizard
+  kingCandidates[4], // Maulana 1
+  kingCandidates[4], // Maulana 2
+]
+
+export const weightedQueenCandidates: Candidate[] = [
+  queenCandidates[0], // Khania
+  queenCandidates[1], // Asyifa
+  queenCandidates[2], // Lily
+  queenCandidates[3], // Aziza
+]
+
+// ─────────────────────────────────────────────────────────────────────────────
 // KONFIGURASI PEMENANG — Admin tentukan di sini sebelum acara
 //
 // Ubah ID di bawah sesuai kandidat yang menang:

@@ -7,7 +7,10 @@ import type { Candidate } from '@/lib/candidates'
 import {
   PREDETERMINED_WINNER_KING_ID,
   PREDETERMINED_WINNER_QUEEN_ID,
+  weightedKingCandidates,
+  weightedQueenCandidates,
 } from '@/lib/candidates'
+import { playTickSound, playCelebrationMusic } from '@/lib/sound-utils'
 
 interface RevealScreenProps {
   kingCandidates: Candidate[]
@@ -73,9 +76,10 @@ export default function RevealScreen({
     const DURATION = 3000
 
     const tick = () => {
+      playTickSound()
       elapsed += INTERVAL
-      setCurrentKingIndex((i) => (i + 1) % kingCandidates.length)
-      setCurrentQueenIndex((i) => (i + 1) % queenCandidates.length)
+      setCurrentKingIndex((i) => (i + 1) % weightedKingCandidates.length)
+      setCurrentQueenIndex((i) => (i + 1) % weightedQueenCandidates.length)
       if (elapsed >= DURATION) {
         setPhase('suspense')
       } else {
@@ -84,7 +88,7 @@ export default function RevealScreen({
     }
     timerRef.current = setTimeout(tick, INTERVAL)
     return clearTimer
-  }, [phase, kingCandidates.length, queenCandidates.length, clearTimer])
+  }, [phase, clearTimer])
 
   // ── PHASE: suspense (pause ↔ spin cycles to build tension) ──
   useEffect(() => {
@@ -107,8 +111,9 @@ export default function RevealScreen({
 
     const doSpin = (spinRemaining: number, onDone: () => void) => {
       if (spinRemaining <= 0) { onDone(); return }
-      setCurrentKingIndex((i) => (i + 1) % kingCandidates.length)
-      setCurrentQueenIndex((i) => (i + 1) % queenCandidates.length)
+      playTickSound()
+      setCurrentKingIndex((i) => (i + 1) % weightedKingCandidates.length)
+      setCurrentQueenIndex((i) => (i + 1) % weightedQueenCandidates.length)
       timerRef.current = setTimeout(
         () => doSpin(spinRemaining - SPIN_INTERVAL, onDone),
         SPIN_INTERVAL
@@ -155,32 +160,34 @@ export default function RevealScreen({
 
     const tick = () => {
       if (steps >= MAX_STEPS) {
-        setCurrentKingIndex(kingCandidates.indexOf(winnerKing.current))
-        setCurrentQueenIndex(queenCandidates.indexOf(winnerQueen.current))
+        setCurrentKingIndex(weightedKingCandidates.findIndex(c => c.id === winnerKing.current.id))
+        setCurrentQueenIndex(weightedQueenCandidates.findIndex(c => c.id === winnerQueen.current.id))
         setPhase('done')
         return
       }
-      setCurrentKingIndex((i) => (i + 1) % kingCandidates.length)
-      setCurrentQueenIndex((i) => (i + 1) % queenCandidates.length)
+      playTickSound()
+      setCurrentKingIndex((i) => (i + 1) % weightedKingCandidates.length)
+      setCurrentQueenIndex((i) => (i + 1) % weightedQueenCandidates.length)
       steps++
       delay = Math.min(delay * 1.18, 1200)
       timerRef.current = setTimeout(tick, delay)
     }
     timerRef.current = setTimeout(tick, delay)
     return clearTimer
-  }, [phase, kingCandidates, queenCandidates, clearTimer])
+  }, [phase, clearTimer])
 
   // ── PHASE: done → fire callback ──
   useEffect(() => {
     if (phase !== 'done') return
+    playCelebrationMusic()
     const t = setTimeout(() => {
       onRevealComplete(winnerKing.current, winnerQueen.current)
     }, 2200)
     return () => clearTimeout(t)
   }, [phase, onRevealComplete])
 
-  const currentKing = kingCandidates[currentKingIndex]
-  const currentQueen = queenCandidates[currentQueenIndex]
+  const currentKing = weightedKingCandidates[currentKingIndex]
+  const currentQueen = weightedQueenCandidates[currentQueenIndex]
   const isSpinning = !isPaused && (phase === 'burst' || phase === 'suspense' || phase === 'slowdown')
   const isDone = phase === 'done'
 
