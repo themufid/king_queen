@@ -149,7 +149,7 @@ function LobbyView({ onStart }: { onStart: () => void }) {
           </div>
 
           <p className="font-sans text-muted-foreground text-sm tracking-[0.2em] uppercase">
-            Pilih Bintang Terbaik Sore Ini
+            SMK Yadika Bandar Lampung
           </p>
         </motion.header>
 
