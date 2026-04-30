@@ -10,7 +10,7 @@ import {
   weightedKingCandidates,
   weightedQueenCandidates,
 } from '@/lib/candidates'
-import { playTickSound, playCelebrationMusic } from '@/lib/sound-utils'
+import { playTickSound, playCelebrationMusic, playCountdownSound } from '@/lib/sound-utils'
 
 interface RevealScreenProps {
   kingCandidates: Candidate[]
@@ -62,6 +62,10 @@ export default function RevealScreen({
     if (countdown === 0) {
       const t = setTimeout(() => setPhase('burst'), 700)
       return () => clearTimeout(t)
+    }
+    // Play sound for current countdown number (5, 4, 3, 2, 1)
+    if (countdown > 0) {
+      playCountdownSound(countdown)
     }
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000)
     return () => clearTimeout(t)
@@ -222,17 +226,26 @@ export default function RevealScreen({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.2, opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="flex flex-col items-center gap-4 z-10"
+            className="flex flex-col items-center gap-8 z-10"
           >
             <p className="font-sans text-muted-foreground/70 tracking-[0.4em] uppercase text-xs md:text-sm">
-              Grand Reveal Dimulai Dalam
+              Grand Reveal Starts In
             </p>
-            <span
-              className="font-serif font-black leading-none shimmer-text select-none"
-              style={{ fontSize: 'clamp(8rem, 22vw, 16rem)' }}
-            >
-              {countdown}
-            </span>
+            <div className="flex flex-col items-center gap-4">
+              <span
+                className="font-serif font-black leading-none shimmer-text select-none"
+                style={{ fontSize: 'clamp(8rem, 22vw, 16rem)' }}
+              >
+                {countdown}
+              </span>
+              <p className="font-sans text-[var(--gold)]/80 tracking-[0.2em] uppercase text-sm md:text-base font-semibold">
+                {countdown === 5 && 'FIVE'}
+                {countdown === 4 && 'FOUR'}
+                {countdown === 3 && 'THREE'}
+                {countdown === 2 && 'TWO'}
+                {countdown === 1 && 'ONE'}
+              </p>
+            </div>
           </motion.div>
         )}
 
@@ -246,7 +259,7 @@ export default function RevealScreen({
             className="font-serif font-black shimmer-text tracking-widest z-10 select-none"
             style={{ fontSize: 'clamp(3rem, 10vw, 7rem)' }}
           >
-            MULAI!
+            GO!
           </motion.div>
         )}
       </AnimatePresence>

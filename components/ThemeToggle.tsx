@@ -12,16 +12,26 @@ export function ThemeToggle() {
   useEffect(() => {
     setMounted(true)
     const savedTheme = localStorage.getItem('kingqueen-theme') as ThemeMode | null
-    if (savedTheme) {
-      setTheme(savedTheme)
-      applyTheme(savedTheme)
-    }
+    const initialTheme = savedTheme || 'dark'
+    setTheme(initialTheme)
+    applyTheme(initialTheme)
   }, [])
 
   const applyTheme = (mode: ThemeMode) => {
     const html = document.documentElement
-    html.className = html.className.replace(/theme-\w+/g, '')
+    // Remove all theme classes
+    html.classList.remove('theme-dark', 'theme-light', 'theme-gradient')
+    // Add new theme class
     html.classList.add(`theme-${mode}`)
+    
+    // Force style update
+    if (mode === 'dark') {
+      document.documentElement.style.background = 'oklch(0.08 0 0)'
+    } else if (mode === 'light') {
+      document.documentElement.style.background = 'linear-gradient(135deg, oklch(0.98 0.01 0) 0%, oklch(0.95 0.02 280) 50%, oklch(0.92 0.03 85) 100%)'
+    } else if (mode === 'gradient') {
+      document.documentElement.style.background = 'linear-gradient(135deg, oklch(0.12 0.02 280) 0%, oklch(0.08 0 0) 50%, oklch(0.10 0.02 85) 100%)'
+    }
   }
 
   const handleThemeChange = (newTheme: ThemeMode) => {

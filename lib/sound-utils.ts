@@ -81,3 +81,35 @@ export const playCelebrationMusic = () => {
     currentTime += duration
   })
 }
+
+// Countdown sounds with English numbers
+export const playCountdownSound = (number: number) => {
+  const audioContext = typeof window !== 'undefined' ? new (window.AudioContext || (window as any).webkitAudioContext)() : null
+  if (!audioContext) return
+
+  // Different frequency for each number to make them distinct
+  const frequencies: Record<number, number> = {
+    5: 400,  // Lower pitch
+    4: 500,
+    3: 600,
+    2: 700,
+    1: 800,  // Higher pitch for "ONE"
+  }
+
+  const freq = frequencies[number] || 400
+  const now = audioContext.currentTime
+
+  // Create a beep sound with the appropriate frequency
+  const osc = audioContext.createOscillator()
+  const gain = audioContext.createGain()
+
+  osc.connect(gain)
+  gain.connect(audioContext.destination)
+
+  osc.frequency.setValueAtTime(freq, now)
+  gain.gain.setValueAtTime(0.4, now)
+  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3)
+
+  osc.start(now)
+  osc.stop(now + 0.3)
+}
