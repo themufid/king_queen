@@ -9,38 +9,15 @@
   --foreground: oklch(0.96 0 0);
 }
 
-/* Light gradient theme */
-.theme-light {
-  --background: oklch(0.98 0.01 0);
-  --foreground: oklch(0.15 0.01 280);
-  --border: oklch(0.78 0.18 80);
-}
-
-.theme-light body {
-  background: linear-gradient(135deg, oklch(0.98 0.01 0) 0%, oklch(0.95 0.02 280) 50%, oklch(0.92 0.03 85) 100%) !important;
-  background-attachment: fixed;
-}
-
-/* Dark gradient theme */
-.theme-gradient {
-  --background: oklch(0.08 0 0);
-  --foreground: oklch(0.96 0 0);
-}
-
-.theme-gradient body {
-  background: linear-gradient(135deg, oklch(0.12 0.02 280) 0%, oklch(0.08 0 0) 50%, oklch(0.10 0.02 85) 100%) !important;
-  background-attachment: fixed;
-}
-
-/* Default dark theme */
-.theme-dark :root {
-  /* King & Queen 2026 — cinematic dark theme */
+/* King & Queen 2026 — cinematic dark theme */
+:root {
+  /* Backgrounds and text colors */
   --background: oklch(0.08 0 0);
   --foreground: oklch(0.96 0 0);
   --card: oklch(0.11 0.008 280);
   --card-foreground: oklch(0.96 0 0);
   --popover: oklch(0.11 0.008 280);
-  --popover-foreground: oklch(0.96 0 0);
+  --popover-foreground: oklch(0.96 0 0)
   --primary: oklch(0.78 0.18 80);        /* gold */
   --primary-foreground: oklch(0.08 0 0);
   --secondary: oklch(0.55 0.2 300);       /* purple */
